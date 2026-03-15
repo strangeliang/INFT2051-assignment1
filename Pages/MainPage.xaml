@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="parcel_station1.Pages.MainPage"
+             Title="Parcel Station">
+
+    <ScrollView>
+       <VerticalStackLayout Padding="24,30,24,24" Spacing="18">
+
+            <Label
+                Text="Parcel Station"
+                FontSize="32"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <Label
+    Text="Secure access to your parcel dashboard"
+    FontSize="14"
+    TextColor="Gray"
+    HorizontalOptions="Center" />
+            <Frame CornerRadius="20"
+       Padding="18"
+       Margin="0,10,0,0"
+       HasShadow="False"
+       BackgroundColor="#F9FAFB">
+                <VerticalStackLayout Spacing="14">
+                    <Entry
+                x:Name="UsernameEntry"
+                Placeholder="Enter username" />
+
+            <Entry
+                x:Name="PasswordEntry"
+                Placeholder="Enter password"
+                IsPassword="True" />
+
+                    <Button
+    Text="Login"
+    HeightRequest="50"
+    CornerRadius="14"
+    Clicked="OnLoginClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

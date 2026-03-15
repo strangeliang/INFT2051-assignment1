@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="parcel_station1.Pages.ResultPage"
+             Title="Parcel Details">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,24" Spacing="18">
+
+            <Label
+            Text="Parcel Details"
+            FontSize="28"
+            FontAttributes="Bold"
+            HorizontalOptions="Center" />
+            <Label Text="View pickup and status information"
+       FontSize="14"
+       TextColor="Gray"
+       HorizontalOptions="Center" />
+
+            <Frame CornerRadius="20"
+       Padding="18"
+       HasShadow="False"
+       BackgroundColor="#F9FAFB">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Parcel Status"
+               FontSize="13"
+               TextColor="Gray" />
+
+                    <Label Text="Ready for Collection"
+               FontSize="24"
+               FontAttributes="Bold"
+               TextColor="Green" />
+                </VerticalStackLayout>
+            </Frame>
+            <Frame CornerRadius="20"
+       Padding="18"
+       HasShadow="False"
+       BackgroundColor="#F9FAFB">
+                <VerticalStackLayout Spacing="12">
+
+                    <Label Text="Parcel Information"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="Black" />
+
+                    <Label Text="Parcel ID: PS1024"
+               FontSize="16"
+               TextColor="Black" />
+
+                    <Label Text="Pickup Location: Locker A-12"
+               FontSize="16"
+               TextColor="Black" />
+
+                    <Label Text="Collection Code: 483920"
+               FontSize="16"
+               TextColor="Black" />
+
+                    <Label Text="Pickup Deadline: 12 March 2026"
+               FontSize="16"
+               TextColor="Black" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
