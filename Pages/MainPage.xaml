@@ -5,8 +5,9 @@
              Title="Parcel Station">
 
     <ScrollView>
-       <VerticalStackLayout Padding="24,30,24,24" Spacing="18">
+        <VerticalStackLayout Padding="24,30,24,24" Spacing="18">
 
+            <!-- Page header -->
             <Label
                 Text="Parcel Station"
                 FontSize="32"
@@ -14,30 +15,32 @@
                 HorizontalOptions="Center" />
 
             <Label
-    Text="Secure access to your parcel dashboard"
-    FontSize="14"
-    TextColor="Gray"
-    HorizontalOptions="Center" />
+                Text="Secure access to your parcel dashboard"
+                FontSize="14"
+                TextColor="Gray"
+                HorizontalOptions="Center" />
+
+            <!-- Login form -->
             <Frame CornerRadius="20"
-       Padding="18"
-       Margin="0,10,0,0"
-       HasShadow="False"
-       BackgroundColor="#F9FAFB">
+                   Padding="18"
+                   Margin="0,10,0,0"
+                   HasShadow="False"
+                   BackgroundColor="#F9FAFB">
                 <VerticalStackLayout Spacing="14">
                     <Entry
-                x:Name="UsernameEntry"
-                Placeholder="Enter username" />
+                        x:Name="UsernameEntry"
+                        Placeholder="Enter username" />
 
-            <Entry
-                x:Name="PasswordEntry"
-                Placeholder="Enter password"
-                IsPassword="True" />
+                    <Entry
+                        x:Name="PasswordEntry"
+                        Placeholder="Enter password"
+                        IsPassword="True" />
 
                     <Button
-    Text="Login"
-    HeightRequest="50"
-    CornerRadius="14"
-    Clicked="OnLoginClicked" />
+                        Text="Login"
+                        HeightRequest="50"
+                        CornerRadius="14"
+                        Clicked="OnLoginClicked" />
                 </VerticalStackLayout>
             </Frame>
 
