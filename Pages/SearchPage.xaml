@@ -2,74 +2,166 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="parcel_station1.Pages.SearchPage"
-             Title="Parcel Station">
+             Title="Parcel Station"
+             BackgroundColor="#F8F8FA">
 
     <Grid>
         <ScrollView>
-            <VerticalStackLayout Padding="24,30,24,24" Spacing="18">
+            <VerticalStackLayout Padding="24,30,24,24"
+                                 Spacing="22"
+                                 MaximumWidthRequest="900"
+                                 HorizontalOptions="Center">
 
-                <Label Text="Welcome back"
-                       FontSize="14"
-                       TextColor="Gray" />
+                <!-- Header -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="6">
+                        <Label x:Name="WelcomeLabel"
+                               Text="Welcome back"
+                               FontSize="14"
+                               TextColor="#7A7A7A" />
 
-                <Label Text="Parcel Station"
-                       FontSize="30"
-                       FontAttributes="Bold"
-                       TextColor="Black" />
-
-                <Label Text="Track and manage your parcels"
-                       FontSize="14"
-                       TextColor="Gray" />
-
-                <HorizontalStackLayout Spacing="10">
-                    <Frame CornerRadius="16" Padding="12" HasShadow="False" BackgroundColor="#F3F4F6" HorizontalOptions="FillAndExpand">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="2" FontSize="20" FontAttributes="Bold" />
-                            <Label Text="Pending" FontSize="12" TextColor="Gray" />
-                        </VerticalStackLayout>
-                    </Frame>
-
-                    <Frame CornerRadius="16" Padding="12" HasShadow="False" BackgroundColor="#F3F4F6" HorizontalOptions="FillAndExpand">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="1" FontSize="20" FontAttributes="Bold" />
-                            <Label Text="Ready" FontSize="12" TextColor="Gray" />
-                        </VerticalStackLayout>
-                    </Frame>
-
-                    <Frame CornerRadius="16" Padding="12" HasShadow="False" BackgroundColor="#F3F4F6" HorizontalOptions="FillAndExpand">
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="5" FontSize="20" FontAttributes="Bold" />
-                            <Label Text="Collected" FontSize="12" TextColor="Gray" />
-                        </VerticalStackLayout>
-                    </Frame>
-                </HorizontalStackLayout>
-
-                <Frame CornerRadius="20"
-                       Padding="18"
-                       Margin="0,10,0,0"
-                       HasShadow="False"
-                       BackgroundColor="#F9FAFB">
-                    <VerticalStackLayout Spacing="14">
-
-                        <Label Text="Search Parcel"
-                               FontSize="22"
+                        <Label Text="My Parcels"
+                               FontSize="32"
                                FontAttributes="Bold"
                                TextColor="Black" />
 
-                        <Label Text="Enter your pickup code to find parcel details"
-                               FontSize="13"
-                               TextColor="Gray" />
+                        <Label Text="Search and manage your parcel records"
+                               FontSize="14"
+                               TextColor="#7A7A7A" />
+                    </VerticalStackLayout>
 
-                        <Entry x:Name="ParcelCodeEntry"
-                               Placeholder="Enter parcel code" />
+                    <Button Grid.Column="1"
+                            Text="Log out"
+                            BackgroundColor="Transparent"
+                            TextColor="#5B2DFF"
+                            FontAttributes="Bold"
+                            Padding="0"
+                            VerticalOptions="Start"
+                            Clicked="OnLogoutClicked" />
+                </Grid>
+
+                <!-- Stats cards -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+
+                    <Frame Grid.Column="0"
+                           CornerRadius="18"
+                           Padding="16"
+                           MinimumHeightRequest="90"
+                           HasShadow="False"
+                           BackgroundColor="#FFF4E5">
+                        <VerticalStackLayout Spacing="6">
+                            <Label x:Name="PendingCountLabel"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+                            <Label Text="Pending"
+                                   FontSize="13"
+                                   TextColor="#8A6A2F" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Grid.Column="1"
+                           CornerRadius="18"
+                           Padding="16"
+                           MinimumHeightRequest="90"
+                           HasShadow="False"
+                           BackgroundColor="#EEF2FF">
+                        <VerticalStackLayout Spacing="6">
+                            <Label x:Name="ReadyCountLabel"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+                            <Label Text="Ready"
+                                   FontSize="13"
+                                   TextColor="#4F46E5" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Grid.Column="2"
+                           CornerRadius="18"
+                           Padding="16"
+                           MinimumHeightRequest="90"
+                           HasShadow="False"
+                           BackgroundColor="#ECFDF3">
+                        <VerticalStackLayout Spacing="6">
+                            <Label x:Name="CollectedCountLabel"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+                            <Label Text="Collected"
+                                   FontSize="13"
+                                   TextColor="#15803D" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                </Grid>
+
+                <!-- Search card -->
+                <Frame CornerRadius="24"
+                       Padding="20"
+                       HasShadow="False"
+                       BackgroundColor="White"
+                       Margin="0,4,0,0">
+                    <VerticalStackLayout Spacing="16">
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Search Parcel"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="Black" />
+
+                            <Label Text="Enter your pickup code to find parcel details"
+                                   FontSize="13"
+                                   TextColor="#7A7A7A" />
+                        </VerticalStackLayout>
+
+                        <Frame CornerRadius="14"
+                               Padding="12,6"
+                               HasShadow="False"
+                               BackgroundColor="#F3F4F6"
+                               BorderColor="#E5E7EB">
+                            <Entry x:Name="ParcelCodeEntry"
+                                   Placeholder="Enter parcel code (e.g. 1234)"
+                                   FontSize="16"
+                                   BackgroundColor="Transparent"
+                                   TextColor="Black"
+                                   PlaceholderColor="#9CA3AF" />
+                        </Frame>
 
                         <Button Text="Search"
+                                HeightRequest="52"
+                                CornerRadius="14"
+                                FontSize="18"
+                                FontAttributes="Bold"
+                                BackgroundColor="#5B2DFF"
+                                TextColor="White"
                                 Clicked="OnSearchClicked" />
+
+                        <Button Text="Add Parcel"
+                                HeightRequest="48"
+                                CornerRadius="14"
+                                BackgroundColor="#EDE9FE"
+                                TextColor="#5B2DFF"
+                                FontAttributes="Bold"
+                                Clicked="OnAddParcelClicked" />
+
+                        <Button Text="Scan QR Code"
+                                HeightRequest="48"
+                                CornerRadius="14"
+                                BackgroundColor="#EEF2FF"
+                                TextColor="#4F46E5"
+                                FontAttributes="Bold"
+                                Clicked="OnScanQrClicked" />
                     </VerticalStackLayout>
                 </Frame>
+
             </VerticalStackLayout>
         </ScrollView>
 
+        <!-- Top notification -->
         <Border x:Name="TopNotification"
                 IsVisible="False"
                 BackgroundColor="#22C55E"

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="parcel_station1.Pages.MainPage"
-             Title="Parcel Station"
+             x:Class="parcel_station1.Pages.RegisterPage"
+             Title="Register"
              BackgroundColor="#F5F7FB">
 
     <ScrollView>
@@ -37,13 +37,13 @@
                        HorizontalOptions="Center"
                        TextColor="#0F172A" />
 
-                <Label Text="智能包裹管理系统"
+                <Label Text="创建您的账户"
                        FontSize="16"
                        TextColor="#64748B"
                        HorizontalOptions="Center" />
             </VerticalStackLayout>
 
-            <!-- 登录卡片 -->
+            <!-- 注册卡片 -->
             <Frame CornerRadius="26"
                    Padding="26"
                    Margin="0,20,0,0"
@@ -53,7 +53,7 @@
 
                 <VerticalStackLayout Spacing="18">
 
-                    <Label Text="登录您的账户"
+                    <Label Text="注册新账户"
                            FontSize="22"
                            FontAttributes="Bold"
                            TextColor="#0F172A" />
@@ -74,7 +74,7 @@
                                        FontSize="20"
                                        VerticalOptions="Center" />
 
-                                <Entry x:Name="UsernameEntry"
+                                <Entry x:Name="NewUsernameEntry"
                                        Placeholder="请输入用户名"
                                        BackgroundColor="Transparent"
                                        TextColor="#0F172A"
@@ -100,7 +100,7 @@
                                        FontSize="20"
                                        VerticalOptions="Center" />
 
-                                <Entry x:Name="PasswordEntry"
+                                <Entry x:Name="NewPasswordEntry"
                                        Placeholder="请输入密码"
                                        IsPassword="True"
                                        BackgroundColor="Transparent"
@@ -111,17 +111,17 @@
                         </Frame>
                     </VerticalStackLayout>
 
-                    <!-- 登录按钮 -->
-                    <Button Text="登录"
+                    <!-- 注册按钮 -->
+                    <Button Text="注册"
                             HeightRequest="56"
                             CornerRadius="18"
                             FontSize="20"
                             FontAttributes="Bold"
                             BackgroundColor="#4F46E5"
                             TextColor="White"
-                            Clicked="OnLoginClicked" />
+                            Clicked="OnRegisterSubmitClicked" />
 
-                    <!-- 注册入口 -->
+                    <!-- 返回登录 -->
                     <Grid ColumnDefinitions="*,Auto,*"
                           ColumnSpacing="12"
                           Margin="0,6,0,0">
@@ -142,17 +142,17 @@
 
                     <HorizontalStackLayout HorizontalOptions="Center"
                                            Spacing="6">
-                        <Label Text="还没有账户？"
+                        <Label Text="已经有账户？"
                                FontSize="15"
                                TextColor="#64748B"
                                VerticalOptions="Center" />
 
-                        <Button Text="立即注册"
+                        <Button Text="返回登录"
                                 BackgroundColor="Transparent"
                                 TextColor="#2563EB"
                                 FontAttributes="Bold"
                                 Padding="0"
-                                Clicked="OnRegisterClicked" />
+                                Clicked="OnBackToLoginClicked" />
                     </HorizontalStackLayout>
 
                 </VerticalStackLayout>

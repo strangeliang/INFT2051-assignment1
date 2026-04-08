@@ -26,22 +26,24 @@ public partial class MainPage : ContentPage
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            await DisplayAlertAsync("Warning", "Please enter username and password.", "OK");
+            await DisplayAlert("Warning", "Please enter username and password.", "OK");
             return;
         }
 
-        var parcel = new Parcel
+        var user = await _parcelDatabase.GetUserAsync(username, password);
+
+        if (user == null)
         {
-            ParcelCode = "P12345",
-            Status = "Ready for Pickup",
-            Location = "Locker A1",
-            PickupDeadline = "2026-04-10"
-        };
+            await DisplayAlert("Login Failed", "Invalid username or password.", "OK");
+            return;
+        }
 
-        await _parcelDatabase.SaveParcelAsync(parcel);
+        await DisplayAlert("Success", "Login successful.", "OK");
+        await Navigation.PushAsync(new SearchPage(_parcelDatabase, username));
+    }
 
-        await DisplayAlertAsync("Success", "Login successful and parcel saved to database.", "OK");
-
-        await Navigation.PushAsync(new SearchPage());
+    private async void OnRegisterClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new RegisterPage(_parcelDatabase));
     }
 }

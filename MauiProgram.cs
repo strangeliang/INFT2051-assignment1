@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
+using ZXing.Net.Maui.Controls;
 using parcel_station1.Data;
 using parcel_station1.Pages;
 
@@ -15,6 +16,7 @@ namespace parcel_station1
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .ConfigureSyncfusionToolkit()
+                .UseBarcodeReader()
                 .ConfigureMauiHandlers(handlers =>
                 {
 #if WINDOWS

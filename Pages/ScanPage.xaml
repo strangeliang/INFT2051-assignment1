@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
+             x:Class="parcel_station1.Pages.ScanPage"
+             Title="Scan QR Code"
+             BackgroundColor="#F8F8FA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,24"
+                             Spacing="20"
+                             MaximumWidthRequest="600"
+                             HorizontalOptions="Center">
+
+            <Label Text="Scan QR Code"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Scan the parcel QR code to retrieve parcel details"
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center" />
+
+            <Frame CornerRadius="24"
+                   Padding="24"
+                   HasShadow="False"
+                   BackgroundColor="White">
+
+                <VerticalStackLayout Spacing="18">
+
+                    <Border Stroke="#D1D5DB"
+                            StrokeThickness="2"
+                            BackgroundColor="#F9FAFB"
+                            HeightRequest="320">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
+
+                        <Grid>
+                            <zxing:CameraBarcodeReaderView
+                                x:Name="barcodeReader"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                BarcodesDetected="BarcodeReader_BarcodesDetected" />
+
+                            <Border WidthRequest="180"
+                                    HeightRequest="180"
+                                    Stroke="#5B2DFF"
+                                    StrokeThickness="3"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    InputTransparent="True">
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="18" />
+                                </Border.StrokeShape>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Label x:Name="ResultLabel"
+                           Text="Align the QR code inside the frame"
+                           FontSize="13"
+                           TextColor="Gray"
+                           HorizontalOptions="Center" />
+
+                    <Button Text="Simulate Scan"
+                            HeightRequest="50"
+                            CornerRadius="14"
+                            BackgroundColor="#5B2DFF"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            Clicked="OnSimulateScanClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

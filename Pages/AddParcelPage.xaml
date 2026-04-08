@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="parcel_station1.Pages.AddParcelPage"
+             Title="Add Parcel"
+             BackgroundColor="#F8F8FA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,30,24,24"
+                             Spacing="18"
+                             MaximumWidthRequest="600"
+                             HorizontalOptions="Center">
+
+            <Label Text="Create Parcel Record"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Enter parcel details manually"
+                   FontSize="14"
+                   TextColor="Gray"
+                   HorizontalOptions="Center" />
+
+            <Frame CornerRadius="22"
+                   Padding="20"
+                   HasShadow="False"
+                   BackgroundColor="White">
+                <VerticalStackLayout Spacing="14">
+
+                    <Entry x:Name="ParcelCodeEntry"
+                           Placeholder="Enter parcel code" />
+
+                    <Entry x:Name="StatusEntry"
+                           Placeholder="Enter status (e.g. Pending / Ready for Collection)" />
+
+                    <Entry x:Name="LocationEntry"
+                           Placeholder="Enter pickup location" />
+
+                    <Entry x:Name="CollectionCodeEntry"
+                           Placeholder="Enter collection code" />
+
+                    <Entry x:Name="PickupDeadlineEntry"
+                           Placeholder="Enter pickup deadline" />
+
+                    <Button Text="Save Parcel"
+                            HeightRequest="50"
+                            CornerRadius="14"
+                            BackgroundColor="#5B2DFF"
+                            TextColor="White"
+                            Clicked="OnSaveParcelClicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

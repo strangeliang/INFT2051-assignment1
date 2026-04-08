@@ -2,65 +2,77 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="parcel_station1.Pages.ResultPage"
-             Title="Parcel Details">
+             Title="Parcel Details"
+             BackgroundColor="#0F1017">
 
     <ScrollView>
-        <VerticalStackLayout Padding="24,30,24,24" Spacing="18">
+        <VerticalStackLayout Padding="24,30,24,24"
+                             Spacing="18"
+                             MaximumWidthRequest="900"
+                             HorizontalOptions="Center">
 
-            <Label
-            Text="Parcel Details"
-            FontSize="28"
-            FontAttributes="Bold"
-            HorizontalOptions="Center" />
-            <Label Text="View pickup and status information"
-       FontSize="14"
-       TextColor="Gray"
-       HorizontalOptions="Center" />
+            <VerticalStackLayout Spacing="6"
+                                 HorizontalOptions="Center">
+                <Label Text="Parcel Details"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center" />
 
-            <Frame CornerRadius="20"
-       Padding="18"
-       HasShadow="False"
-       BackgroundColor="#F9FAFB">
+                <Label Text="View pickup and status information"
+                       FontSize="14"
+                       TextColor="#A1A1AA"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <Frame CornerRadius="22"
+                   Padding="20"
+                   BackgroundColor="White"
+                   HasShadow="False">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Parcel Status"
-               FontSize="13"
-               TextColor="Gray" />
+                           FontSize="14"
+                           TextColor="Gray" />
 
-                    <Label Text="Ready for Collection"
-               FontSize="24"
-               FontAttributes="Bold"
-               TextColor="Green" />
+                    <Label x:Name="ParcelStatusLabel"
+                           Text="Ready for Collection"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="#15803D" />
                 </VerticalStackLayout>
             </Frame>
-            <Frame CornerRadius="20"
-       Padding="18"
-       HasShadow="False"
-       BackgroundColor="#F9FAFB">
-                <VerticalStackLayout Spacing="12">
 
+            <Frame CornerRadius="22"
+                   Padding="20"
+                   BackgroundColor="White"
+                   HasShadow="False">
+                <VerticalStackLayout Spacing="14">
                     <Label Text="Parcel Information"
-               FontSize="20"
-               FontAttributes="Bold"
-               TextColor="Black" />
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
 
-                    <Label Text="Parcel ID: PS1024"
-               FontSize="16"
-               TextColor="Black" />
+                    <Label x:Name="ParcelIdLabel"
+                           Text="Parcel ID: 1234"
+                           FontSize="16"
+                           TextColor="Black" />
 
-                    <Label Text="Pickup Location: Locker A-12"
-               FontSize="16"
-               TextColor="Black" />
+                    <Label x:Name="PickupLocationLabel"
+                           Text="Pickup Location: Locker A-12"
+                           FontSize="16"
+                           TextColor="Black" />
 
-                    <Label Text="Collection Code: 483920"
-               FontSize="16"
-               TextColor="Black" />
+                    <Label x:Name="CollectionCodeLabel"
+                           Text="Collection Code: 483920"
+                           FontSize="16"
+                           TextColor="Black" />
 
-                    <Label Text="Pickup Deadline: 12 March 2026"
-               FontSize="16"
-               TextColor="Black" />
+                    <Label x:Name="PickupDeadlineLabel"
+                           Text="Pickup Deadline: 12 March 2026"
+                           FontSize="16"
+                           TextColor="Black" />
                 </VerticalStackLayout>
             </Frame>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
