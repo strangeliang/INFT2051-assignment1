@@ -20,7 +20,7 @@ public partial class RegisterPage : ContentPage
 
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            await DisplayAlert("Warning", "Please enter username and password.", "OK");
+            await DisplayAlertAsync("Warning", "Please enter username and password.", "OK");
             return;
         }
 
@@ -28,7 +28,7 @@ public partial class RegisterPage : ContentPage
 
         if (existingUser != null)
         {
-            await DisplayAlert("Warning", "This username already exists.", "OK");
+            await DisplayAlertAsync("Warning", "This username already exists.", "OK");
             return;
         }
 
@@ -40,7 +40,7 @@ public partial class RegisterPage : ContentPage
 
         await _parcelDatabase.SaveUserAsync(user);
 
-        await DisplayAlert("Success", "Registration successful. Please log in.", "OK");
+        await DisplayAlertAsync("Success", "Registration successful. Please log in.", "OK");
         await Navigation.PopAsync();
     }
 

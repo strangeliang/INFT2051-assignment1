@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="parcel_station1.Pages.HistoryPage"
+             Title="History"
+             BackgroundColor="#F5F7FB"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid RowDefinitions="190,*">
+
+        <!-- Header -->
+        <Grid Padding="24,48,24,20">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#0F172A" Offset="0.0" />
+                    <GradientStop Color="#1E3A8A" Offset="0.55" />
+                    <GradientStop Color="#2563EB" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <VerticalStackLayout Spacing="6">
+                <Label x:Name="HistoryWelcomeLabel"
+                       Text="Parcel history"
+                       FontSize="14"
+                       TextColor="#DBEAFE" />
+
+                <Label Text="History"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="White" />
+
+                <Label Text="Review all parcel activity records"
+                       FontSize="14"
+                       TextColor="#DBEAFE" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Body -->
+        <Border Grid.Row="1"
+                Background="#F8FAFC"
+                StrokeThickness="0"
+                Padding="22,28,22,24"
+                Margin="0,-18,0,0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="32,32,0,0" />
+            </Border.StrokeShape>
+
+            <ScrollView>
+                <VerticalStackLayout Spacing="18"
+                                     MaximumWidthRequest="900"
+                                     HorizontalOptions="Center">
+
+                    <!-- Empty state -->
+                    <Border x:Name="EmptyStateFrame"
+                            IsVisible="False"
+                            Background="White"
+                            Stroke="#E5E7EB"
+                            StrokeThickness="1"
+                            Padding="24">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="22" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="10"
+                                             HorizontalOptions="Center">
+                            <Label Text="📭"
+                                   FontSize="42"
+                                   HorizontalOptions="Center" />
+
+                            <Label Text="No parcel history found"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827"
+                                   HorizontalOptions="Center" />
+
+                            <Label Text="Your parcel records will appear here once you add or receive parcels."
+                                   FontSize="14"
+                                   TextColor="#6B7280"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- History list -->
+                    <CollectionView x:Name="HistoryCollectionView"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="White"
+                                        Stroke="#E5E7EB"
+                                        StrokeThickness="1"
+                                        Padding="14"
+                                        Margin="0,0,0,12">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+
+                                    <Grid RowDefinitions="Auto,Auto,Auto"
+                                          ColumnDefinitions="*,Auto"
+                                          RowSpacing="6">
+
+                                        <Label Text="{Binding ParcelCode}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="#111827" />
+
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Status}"
+                                               FontSize="13"
+                                               FontAttributes="Bold"
+                                               TextColor="{Binding StatusColor}" />
+
+                                        <Label Grid.Row="1"
+                                               Text="{Binding LocationDisplay}"
+                                               FontSize="13"
+                                               TextColor="#6B7280" />
+
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="{Binding PickupDeadlineDisplay}"
+                                               FontSize="12"
+                                               TextColor="#9CA3AF"
+                                               HorizontalTextAlignment="End" />
+
+                                        <Label Grid.Row="2"
+                                               Grid.ColumnSpan="2"
+                                               Text="{Binding CollectionCodeDisplay}"
+                                               FontSize="13"
+                                               TextColor="#6B7280" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Back"
+                            HeightRequest="50"
+                            CornerRadius="16"
+                            BackgroundColor="#111827"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            Clicked="OnBackClicked" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+
+    </Grid>
+</ContentPage>

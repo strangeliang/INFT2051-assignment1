@@ -1,6 +1,9 @@
-﻿using Microsoft.Maui.Devices;
+﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
+using Microsoft.Maui.Graphics;
 using parcel_station1.Data;
 using parcel_station1.Models;
+using parcel_station1.Services;
 
 namespace parcel_station1.Pages;
 
@@ -8,6 +11,7 @@ public partial class SearchPage : ContentPage
 {
     private readonly ParcelDatabase _parcelDatabase;
     private readonly string _username;
+    private List<HistoryPreviewItem> _historyPreviewItems = new();
 
     public SearchPage(ParcelDatabase parcelDatabase, string username)
     {
@@ -23,20 +27,14 @@ public partial class SearchPage : ContentPage
         WelcomeLabel.Text = $"Welcome back, {_username}";
 
         await _parcelDatabase.InitAsync();
-
-        // 先把公共测试数据关掉，避免所有用户共用
-        // await SeedTestParcelsAsync();
-
         await LoadParcelCountsAsync();
+        await LoadHistoryPreviewAsync();
+        await LoadLatestParcelSummaryAsync();
     }
-
-    // =========================
-    // Button events
-    // =========================
 
     private async void OnSearchClicked(object sender, EventArgs e)
     {
-        string code = ParcelCodeEntry.Text?.Trim() ?? "";
+        string code = ParcelCodeEntry.Text?.Trim() ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(code))
         {
@@ -44,7 +42,6 @@ public partial class SearchPage : ContentPage
             return;
         }
 
-        // 只查当前用户自己的包裹
         var parcel = await _parcelDatabase.GetParcelByCodeAndUsernameAsync(code, _username);
 
         if (parcel == null)
@@ -57,13 +54,15 @@ public partial class SearchPage : ContentPage
 
         try
         {
-            Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(400));
+            Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(250));
         }
         catch
         {
         }
 
-        await Task.Delay(300);
+        BeepService.PlaySuccessBeep();
+
+        await Task.Delay(250);
         await Navigation.PushAsync(new ResultPage(parcel));
     }
 
@@ -77,6 +76,11 @@ public partial class SearchPage : ContentPage
         await Navigation.PushAsync(new ScanPage(_parcelDatabase, _username));
     }
 
+    private async void OnHistoryClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new HistoryPage(_parcelDatabase, _username));
+    }
+
     private async void OnLogoutClicked(object sender, EventArgs e)
     {
         bool confirm = await DisplayAlertAsync("Log out", "Are you sure you want to log out?", "Yes", "No");
@@ -87,76 +91,142 @@ public partial class SearchPage : ContentPage
         await Navigation.PopAsync();
     }
 
-    // =========================
-    // Helper methods
-    // =========================
-
     private async Task ShowTopNotification(string message, string backgroundColor)
     {
         TopNotificationLabel.Text = message;
-        TopNotification.BackgroundColor = Color.FromArgb(backgroundColor);
+        TopNotification.Background = new SolidColorBrush(Color.FromArgb(backgroundColor));
         TopNotification.IsVisible = true;
 
         TopNotification.TranslationY = -120;
-        await TopNotification.TranslateTo(0, 0, 250, Easing.CubicOut);
+        await TopNotification.TranslateToAsync(0, 0, 250, Easing.CubicOut);
 
         await Task.Delay(1800);
 
-        await TopNotification.TranslateTo(0, -120, 250, Easing.CubicIn);
+        await TopNotification.TranslateToAsync(0, -120, 250, Easing.CubicIn);
         TopNotification.IsVisible = false;
-    }
-
-    // 如果以后还想保留演示数据，可以再用这个方法
-    private async Task SeedTestParcelsAsync()
-    {
-        var allParcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
-
-        if (allParcels.Count > 0)
-            return;
-
-        await _parcelDatabase.SaveParcelAsync(new Parcel
-        {
-            Username = _username,
-            ParcelCode = "1234",
-            Status = "Ready for Collection",
-            Location = "Locker A-12",
-            CollectionCode = "483920",
-            PickupDeadline = "12 March 2026"
-        });
-
-        await _parcelDatabase.SaveParcelAsync(new Parcel
-        {
-            Username = _username,
-            ParcelCode = "5678",
-            Status = "Pending",
-            Location = "Locker B-03",
-            CollectionCode = "715204",
-            PickupDeadline = "15 March 2026"
-        });
-
-        await _parcelDatabase.SaveParcelAsync(new Parcel
-        {
-            Username = _username,
-            ParcelCode = "9999",
-            Status = "Collected",
-            Location = "Locker C-07",
-            CollectionCode = "000000",
-            PickupDeadline = "Completed"
-        });
     }
 
     private async Task LoadParcelCountsAsync()
     {
-        // 只统计当前用户自己的包裹
         var parcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
 
-        int pending = parcels.Count(p => p.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase));
-        int ready = parcels.Count(p => p.Status.Equals("Ready for Collection", StringComparison.OrdinalIgnoreCase)
-                                    || p.Status.Equals("Ready", StringComparison.OrdinalIgnoreCase));
-        int collected = parcels.Count(p => p.Status.Equals("Collected", StringComparison.OrdinalIgnoreCase));
+        int pending = parcels.Count(p =>
+            string.Equals(p.Status, "Pending", StringComparison.OrdinalIgnoreCase));
+
+        int ready = parcels.Count(p =>
+            string.Equals(p.Status, "Ready for Collection", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(p.Status, "Ready", StringComparison.OrdinalIgnoreCase));
+
+        int collected = parcels.Count(p =>
+            string.Equals(p.Status, "Collected", StringComparison.OrdinalIgnoreCase));
 
         PendingCountLabel.Text = pending.ToString();
         ReadyCountLabel.Text = ready.ToString();
         CollectedCountLabel.Text = collected.ToString();
     }
+
+    private async Task LoadHistoryPreviewAsync()
+    {
+        var parcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
+
+        var recentParcels = parcels
+            .AsEnumerable()
+            .Reverse()
+            .Take(3)
+            .ToList();
+
+        _historyPreviewItems.Clear();
+
+        foreach (var parcel in recentParcels)
+        {
+            _historyPreviewItems.Add(new HistoryPreviewItem
+            {
+                ParcelCode = $"PS{parcel.ParcelCode}",
+                Status = parcel.Status ?? string.Empty,
+                StatusColor = GetPreviewStatusColor(parcel.Status),
+                Subtitle = GetHistorySubtitle(parcel)
+            });
+        }
+
+        HistoryPreviewCollectionView.ItemsSource = null;
+        HistoryPreviewCollectionView.ItemsSource = _historyPreviewItems;
+
+        HistoryEmptyLabel.IsVisible = _historyPreviewItems.Count == 0;
+        HistoryPreviewCollectionView.IsVisible = _historyPreviewItems.Count > 0;
+    }
+
+    private async Task LoadLatestParcelSummaryAsync()
+    {
+        var parcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
+
+        var latestParcel = parcels
+            .AsEnumerable()
+            .Reverse()
+            .FirstOrDefault();
+
+        if (latestParcel == null)
+        {
+            LatestParcelCodeLabel.Text = "No parcels yet";
+            LatestParcelStatusLabel.Text = "No recent parcel activity";
+            LatestParcelTimeLabel.Text = "--";
+            return;
+        }
+
+        LatestParcelCodeLabel.Text = $"PS{latestParcel.ParcelCode}";
+        LatestParcelStatusLabel.Text = GetHistorySubtitle(latestParcel);
+        LatestParcelTimeLabel.Text = GetLatestTimeText(latestParcel);
+    }
+
+    private string GetPreviewStatusColor(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+            return "#6B7280";
+
+        return status.Trim().ToLower() switch
+        {
+            "pending" => "#A16207",
+            "ready" => "#4F46E5",
+            "ready for collection" => "#4F46E5",
+            "collected" => "#15803D",
+            _ => "#6B7280"
+        };
+    }
+
+    private string GetHistorySubtitle(Parcel parcel)
+    {
+        if (string.IsNullOrWhiteSpace(parcel.Status))
+            return "No status available";
+
+        return parcel.Status.Trim().ToLower() switch
+        {
+            "collected" => $"Collected - {parcel.PickupDeadline}",
+            "ready" => $"Ready for pickup - {parcel.Location}",
+            "ready for collection" => $"Ready for pickup - {parcel.Location}",
+            "pending" => $"Awaiting processing - {parcel.Location}",
+            _ => parcel.Location ?? "Parcel updated"
+        };
+    }
+
+    private string GetLatestTimeText(Parcel parcel)
+    {
+        if (string.IsNullOrWhiteSpace(parcel.Status))
+            return "Now";
+
+        return parcel.Status.Trim().ToLower() switch
+        {
+            "pending" => "Pending",
+            "ready" => "Ready",
+            "ready for collection" => "Ready",
+            "collected" => "Done",
+            _ => "Now"
+        };
+    }
+}
+
+public class HistoryPreviewItem
+{
+    public string ParcelCode { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string StatusColor { get; set; } = "#6B7280";
+    public string Subtitle { get; set; } = string.Empty;
 }

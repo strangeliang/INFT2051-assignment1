@@ -1,78 +1,227 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
              x:Class="parcel_station1.Pages.ResultPage"
              Title="Parcel Details"
-             BackgroundColor="#0F1017">
+             BackgroundColor="#F5F7FB"
+             NavigationPage.HasNavigationBar="False">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="24,30,24,24"
-                             Spacing="18"
-                             MaximumWidthRequest="900"
-                             HorizontalOptions="Center">
+    <Grid RowDefinitions="190,*">
 
-            <VerticalStackLayout Spacing="6"
-                                 HorizontalOptions="Center">
+        <!-- Header -->
+        <Grid Padding="24,48,24,20">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#0F172A" Offset="0.0" />
+                    <GradientStop Color="#1E3A8A" Offset="0.55" />
+                    <GradientStop Color="#2563EB" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Parcel details"
+                       FontSize="14"
+                       TextColor="#DBEAFE" />
+
                 <Label Text="Parcel Details"
                        FontSize="30"
                        FontAttributes="Bold"
-                       TextColor="White"
-                       HorizontalOptions="Center" />
+                       TextColor="White" />
 
                 <Label Text="View pickup and status information"
                        FontSize="14"
-                       TextColor="#A1A1AA"
-                       HorizontalOptions="Center" />
+                       TextColor="#DBEAFE" />
             </VerticalStackLayout>
+        </Grid>
 
-            <Frame CornerRadius="22"
-                   Padding="20"
-                   BackgroundColor="White"
-                   HasShadow="False">
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="Parcel Status"
-                           FontSize="14"
-                           TextColor="Gray" />
+        <!-- Body -->
+        <Border Grid.Row="1"
+                Background="#F8FAFC"
+                StrokeThickness="0"
+                Padding="22,28,22,24"
+                Margin="0,-18,0,0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="32,32,0,0" />
+            </Border.StrokeShape>
 
-                    <Label x:Name="ParcelStatusLabel"
-                           Text="Ready for Collection"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           TextColor="#15803D" />
+            <ScrollView>
+                <VerticalStackLayout Spacing="18"
+                                     MaximumWidthRequest="900"
+                                     HorizontalOptions="Center">
+
+                    <!-- Status card -->
+                    <Border Background="White"
+                            Stroke="#E5E7EB"
+                            StrokeThickness="1"
+                            Padding="20">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="22" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Parcel Status"
+                                   FontSize="14"
+                                   TextColor="#6B7280" />
+
+                            <Label x:Name="ParcelStatusLabel"
+                                   Text="Ready for Collection"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#15803D" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Details card -->
+                    <Border Background="White"
+                            Stroke="#E5E7EB"
+                            StrokeThickness="1"
+                            Padding="22">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="22" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="16">
+
+                            <Label Text="Parcel Information"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827" />
+
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                  ColumnDefinitions="Auto,*"
+                                  RowSpacing="14"
+                                  ColumnSpacing="12">
+
+                                <Label Text="📦"
+                                       FontSize="18"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Column="1"
+                                       x:Name="ParcelIdLabel"
+                                       Text="Parcel ID: 1234"
+                                       FontSize="16"
+                                       TextColor="#111827"
+                                       VerticalOptions="Center" />
+
+                                <Label Grid.Row="1"
+                                       Text="📍"
+                                       FontSize="18"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Row="1"
+                                       Grid.Column="1"
+                                       x:Name="PickupLocationLabel"
+                                       Text="Pickup Location: Locker A-12"
+                                       FontSize="16"
+                                       TextColor="#111827"
+                                       VerticalOptions="Center" />
+
+                                <Label Grid.Row="2"
+                                       Text="🔐"
+                                       FontSize="18"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Row="2"
+                                       Grid.Column="1"
+                                       x:Name="CollectionCodeLabel"
+                                       Text="Collection Code: 483920"
+                                       FontSize="16"
+                                       TextColor="#111827"
+                                       VerticalOptions="Center" />
+
+                                <Label Grid.Row="3"
+                                       Text="⏰"
+                                       FontSize="18"
+                                       VerticalOptions="Center" />
+                                <Label Grid.Row="3"
+                                       Grid.Column="1"
+                                       x:Name="PickupDeadlineLabel"
+                                       Text="Pickup Deadline: 12 March 2026"
+                                       FontSize="16"
+                                       TextColor="#111827"
+                                       VerticalOptions="Center" />
+                            </Grid>
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- QR code card -->
+                    <Border Background="White"
+                            Stroke="#E5E7EB"
+                            StrokeThickness="1"
+                            Padding="22">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="22" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="14"
+                                             HorizontalOptions="Center">
+
+                            <Label Text="Parcel QR Code"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827"
+                                   HorizontalOptions="Center" />
+
+                            <Label Text="Scan this code to retrieve the parcel"
+                                   FontSize="14"
+                                   TextColor="#6B7280"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Border Background="White"
+                                    Stroke="#D1D5DB"
+                                    StrokeThickness="1"
+                                    Padding="12"
+                                    WidthRequest="220"
+                                    HeightRequest="220">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16" />
+                                </Border.StrokeShape>
+
+                                <Grid>
+                                    <zxing:BarcodeGeneratorView x:Name="ParcelQrCode"
+                                                                Format="QrCode"
+                                                                Value="1234"
+                                                                ForegroundColor="Black"
+                                                                BackgroundColor="White"
+                                                                HorizontalOptions="Fill"
+                                                                VerticalOptions="Fill" />
+                                </Grid>
+                            </Border>
+
+                            <Label x:Name="ParcelQrTextLabel"
+                                   Text="QR content: 1234"
+                                   FontSize="13"
+                                   TextColor="#6B7280"
+                                   HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Action buttons -->
+                    <VerticalStackLayout Spacing="12">
+
+                        <Button Text="Back to Main Menu"
+                                HeightRequest="52"
+                                CornerRadius="16"
+                                BackgroundColor="#2563EB"
+                                TextColor="White"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                Clicked="OnBackToMainMenuClicked" />
+
+                        <Button Text="Back"
+                                HeightRequest="50"
+                                CornerRadius="16"
+                                BackgroundColor="#111827"
+                                TextColor="White"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                Clicked="OnBackClicked" />
+
+                    </VerticalStackLayout>
+
                 </VerticalStackLayout>
-            </Frame>
+            </ScrollView>
+        </Border>
 
-            <Frame CornerRadius="22"
-                   Padding="20"
-                   BackgroundColor="White"
-                   HasShadow="False">
-                <VerticalStackLayout Spacing="14">
-                    <Label Text="Parcel Information"
-                           FontSize="22"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-
-                    <Label x:Name="ParcelIdLabel"
-                           Text="Parcel ID: 1234"
-                           FontSize="16"
-                           TextColor="Black" />
-
-                    <Label x:Name="PickupLocationLabel"
-                           Text="Pickup Location: Locker A-12"
-                           FontSize="16"
-                           TextColor="Black" />
-
-                    <Label x:Name="CollectionCodeLabel"
-                           Text="Collection Code: 483920"
-                           FontSize="16"
-                           TextColor="Black" />
-
-                    <Label x:Name="PickupDeadlineLabel"
-                           Text="Pickup Deadline: 12 March 2026"
-                           FontSize="16"
-                           TextColor="Black" />
-                </VerticalStackLayout>
-            </Frame>
-        </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>

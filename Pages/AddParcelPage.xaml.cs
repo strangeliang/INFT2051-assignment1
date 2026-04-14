@@ -29,14 +29,15 @@ public partial class AddParcelPage : ContentPage
             string.IsNullOrWhiteSpace(collectionCode) ||
             string.IsNullOrWhiteSpace(pickupDeadline))
         {
-            await DisplayAlert("Warning", "Please fill in all parcel details.", "OK");
+            await DisplayAlertAsync("Warning", "Please fill in all parcel details.", "OK");
             return;
         }
 
         var existingParcel = await _parcelDatabase.GetParcelByCodeAndUsernameAsync(parcelCode, _username);
+
         if (existingParcel != null)
         {
-            await DisplayAlert("Warning", "This parcel code already exists for this user.", "OK");
+            await DisplayAlertAsync("Warning", "This parcel code already exists for this user.", "OK");
             return;
         }
 
@@ -52,7 +53,7 @@ public partial class AddParcelPage : ContentPage
 
         await _parcelDatabase.SaveParcelAsync(parcel);
 
-        await DisplayAlert("Success", "Parcel saved successfully.", "OK");
+        await DisplayAlertAsync("Success", "Parcel saved successfully.", "OK");
         await Navigation.PopAsync();
     }
 }

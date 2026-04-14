@@ -14,16 +14,22 @@ public partial class ResultPage : ContentPage
         CollectionCodeLabel.Text = $"Collection Code: {parcel.CollectionCode}";
         PickupDeadlineLabel.Text = $"Pickup Deadline: {parcel.PickupDeadline}";
 
-        if (parcel.Status.Equals("Ready for Collection", StringComparison.OrdinalIgnoreCase) ||
-            parcel.Status.Equals("Ready", StringComparison.OrdinalIgnoreCase))
+        ParcelQrTextLabel.Text = $"QR content: {parcel.ParcelCode}";
+        ParcelQrCode.Value = parcel.ParcelCode;
+
+        if (!string.IsNullOrWhiteSpace(parcel.Status) &&
+            (parcel.Status.Equals("Ready for Collection", StringComparison.OrdinalIgnoreCase) ||
+             parcel.Status.Equals("Ready", StringComparison.OrdinalIgnoreCase)))
         {
             ParcelStatusLabel.TextColor = Color.FromArgb("#15803D");
         }
-        else if (parcel.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+        else if (!string.IsNullOrWhiteSpace(parcel.Status) &&
+                 parcel.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
         {
             ParcelStatusLabel.TextColor = Color.FromArgb("#D97706");
         }
-        else if (parcel.Status.Equals("Collected", StringComparison.OrdinalIgnoreCase))
+        else if (!string.IsNullOrWhiteSpace(parcel.Status) &&
+                 parcel.Status.Equals("Collected", StringComparison.OrdinalIgnoreCase))
         {
             ParcelStatusLabel.TextColor = Color.FromArgb("#2563EB");
         }
@@ -31,5 +37,15 @@ public partial class ResultPage : ContentPage
         {
             ParcelStatusLabel.TextColor = Color.FromArgb("#111827");
         }
+    }
+
+    private async void OnBackClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopAsync();
+    }
+
+    private async void OnBackToMainMenuClicked(object sender, EventArgs e)
+    {
+        await Navigation.PopToRootAsync();
     }
 }

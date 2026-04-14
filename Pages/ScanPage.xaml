@@ -40,23 +40,66 @@
 
                         <Grid>
                             <zxing:CameraBarcodeReaderView
-                                x:Name="barcodeReader"
-                                HorizontalOptions="Fill"
-                                VerticalOptions="Fill"
-                                BarcodesDetected="BarcodeReader_BarcodesDetected" />
+        x:Name="barcodeReader"
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill"
+        BarcodesDetected="BarcodeReader_BarcodesDetected" />
 
-                            <Border WidthRequest="180"
-                                    HeightRequest="180"
-                                    Stroke="#5B2DFF"
-                                    StrokeThickness="3"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center"
-                                    InputTransparent="True">
+                            <!-- 更像真实扫码框的透明角标 -->
+                            <Grid WidthRequest="220"
+          HeightRequest="220"
+          HorizontalOptions="Center"
+          VerticalOptions="Center"
+          InputTransparent="True">
 
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="18" />
-                                </Border.StrokeShape>
-                            </Border>
+                                <!-- 左上角 -->
+                                <BoxView WidthRequest="40"
+                 HeightRequest="4"
+                 Color="#5B2DFF"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Start" />
+                                <BoxView WidthRequest="4"
+                 HeightRequest="40"
+                 Color="#5B2DFF"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Start" />
+
+                                <!-- 右上角 -->
+                                <BoxView WidthRequest="40"
+                 HeightRequest="4"
+                 Color="#5B2DFF"
+                 HorizontalOptions="End"
+                 VerticalOptions="Start" />
+                                <BoxView WidthRequest="4"
+                 HeightRequest="40"
+                 Color="#5B2DFF"
+                 HorizontalOptions="End"
+                 VerticalOptions="Start" />
+
+                                <!-- 左下角 -->
+                                <BoxView WidthRequest="40"
+                 HeightRequest="4"
+                 Color="#5B2DFF"
+                 HorizontalOptions="Start"
+                 VerticalOptions="End" />
+                                <BoxView WidthRequest="4"
+                 HeightRequest="40"
+                 Color="#5B2DFF"
+                 HorizontalOptions="Start"
+                 VerticalOptions="End" />
+
+                                <!-- 右下角 -->
+                                <BoxView WidthRequest="40"
+                 HeightRequest="4"
+                 Color="#5B2DFF"
+                 HorizontalOptions="End"
+                 VerticalOptions="End" />
+                                <BoxView WidthRequest="4"
+                 HeightRequest="40"
+                 Color="#5B2DFF"
+                 HorizontalOptions="End"
+                 VerticalOptions="End" />
+                            </Grid>
                         </Grid>
                     </Border>
 

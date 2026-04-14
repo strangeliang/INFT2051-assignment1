@@ -1,5 +1,6 @@
 ﻿using ZXing.Net.Maui;
 using parcel_station1.Data;
+using parcel_station1.Services;
 
 namespace parcel_station1.Pages;
 
@@ -41,13 +42,37 @@ public partial class ScanPage : ContentPage
             {
                 barcodeReader.IsDetecting = false;
 
-                string scannedValue = first.Value;
+                string scannedValue = first.Value?.Trim() ?? string.Empty;
                 ResultLabel.Text = $"Scanned: {scannedValue}";
 
-                await DisplayAlert("Scan Success", $"QR Code: {scannedValue}", "OK");
+                if (string.IsNullOrWhiteSpace(scannedValue))
+                {
+                    await DisplayAlertAsync("Scan Failed", "Scanned QR code is empty.", "OK");
+                    barcodeReader.IsDetecting = true;
+                    return;
+                }
 
-                // 之后你可以在这里用 _parcelDatabase 查数据库
-                // 也可以带着 scannedValue 跳转去结果页
+                var parcel = await _parcelDatabase.GetParcelByCodeAndUsernameAsync(scannedValue, _username);
+
+                if (parcel == null)
+                {
+                    await DisplayAlertAsync("Not Found", $"No parcel found for code: {scannedValue}", "OK");
+                    barcodeReader.IsDetecting = true;
+                    return;
+                }
+
+                try
+                {
+                    Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(250));
+                }
+                catch
+                {
+                }
+
+                BeepService.PlaySuccessBeep();
+
+                await DisplayAlertAsync("Scan Success", $"Parcel found: {scannedValue}", "OK");
+                await Navigation.PushAsync(new ResultPage(parcel));
             }
             finally
             {
@@ -58,7 +83,28 @@ public partial class ScanPage : ContentPage
 
     private async void OnSimulateScanClicked(object sender, EventArgs e)
     {
-        ResultLabel.Text = "Scanned: 1234";
-        await DisplayAlert("Simulated Scan", "QR Code: 1234", "OK");
+        string simulatedCode = "1234";
+        ResultLabel.Text = $"Scanned: {simulatedCode}";
+
+        var parcel = await _parcelDatabase.GetParcelByCodeAndUsernameAsync(simulatedCode, _username);
+
+        if (parcel == null)
+        {
+            await DisplayAlertAsync("Not Found", $"No parcel found for code: {simulatedCode}", "OK");
+            return;
+        }
+
+        try
+        {
+            Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(250));
+        }
+        catch
+        {
+        }
+
+        BeepService.PlaySuccessBeep();
+
+        await DisplayAlertAsync("Simulated Scan", $"Parcel found: {simulatedCode}", "OK");
+        await Navigation.PushAsync(new ResultPage(parcel));
     }
 }
