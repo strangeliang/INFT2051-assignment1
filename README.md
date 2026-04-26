@@ -1,32 +1,52 @@
 # Parcel Station
 
-Parcel Station is a mobile app prototype designed to help users search parcel information, check parcel status, and support parcel collection through a more realistic mobile workflow.
+Parcel Station is a mobile app prototype built with .NET MAUI for INFT2051 Assignment 3. The app helps users manage parcel collection by allowing them to register, log in, add parcel records, search parcel details, scan parcel QR codes, and view parcel history.
 
-## Current Features
+## Main Features
 
-- Login page
+- User registration and login
 - Main dashboard page
-- Search page
-- Parcel details page
+- Add new parcel records
+- Search parcels by parcel code
+- View parcel details and QR code
+- QR code scanning for parcel lookup
 - Parcel history page
-- Add parcel page
-- Scan function for parcel collection
+- Mark parcels as Collected
+- Clear parcel records from history
+- Dashboard statistics for Pending, Ready, and Collected parcels
+- Recent parcel preview
+- Vibration feedback
+- Android success beep feedback
+- Local SQLite database storage
 
-## Week 12 Progress Update
+## Technologies Used
 
-This week, the project was further improved through both UI refinement and feature development.
+- C#
+- .NET MAUI
+- XAML
+- SQLite
+- ZXing.Net.MAUI
+- CommunityToolkit.Maui
+- Syncfusion.Maui.Toolkit
 
-The main updates include:
+## Database
 
-- Improved the overall UI design for a cleaner and more realistic mobile app style
-- Refined the main page UI, including the dashboard layout and feature shortcuts
-- Improved the search page UI for a better parcel search experience
-- Added a scanning function to support parcel collection workflow
-- Updated related pages and supporting project files
+The app uses a local SQLite database to store user and parcel information. Each parcel record is linked to the logged-in username, so users can only view and manage their own parcel records.
 
-## Next Step
+## Navigation Flow
 
-- Connect the UI with parcel database functionality
-- Improve navigation between screens
-- Further test and refine the scan feature
-- Make the user flow smoother and more realistic
+Login Page → Dashboard  
+Login Page → Register Page  
+Dashboard → Add Parcel Page  
+Dashboard → Search Result Page  
+Dashboard → Scan Page  
+Dashboard → History Page  
+History Page → Mark as Collected / Clear Record
+
+## Testing Status
+
+The app has been tested on Windows Machine. The tested features include registration, login, parcel adding, parcel search, result display, QR scanning, dashboard statistics, parcel history, mark as collected, and clear parcel record.
+
+## Final Submission Notes
+
+This repository contains the final app source code for INFT2051 Assignment 3. The app focuses on a parcel collection workflow with local storage, QR scanning, user feedback, and parcel history management.
