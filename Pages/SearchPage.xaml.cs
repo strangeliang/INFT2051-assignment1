@@ -7,15 +7,23 @@ using parcel_station1.Services;
 
 namespace parcel_station1.Pages;
 
+// SearchPage works as the main dashboard after login.
+// It supports parcel search, dashboard statistics, QR scanning, history, and logout.
 public partial class SearchPage : ContentPage
 {
+    // Database object used to read and manage parcel data.
     private readonly ParcelDatabase _parcelDatabase;
+
+    // Stores the current username so each user only sees their own parcels.
     private readonly string _username;
+
+    // Stores the recent parcel records shown on the dashboard preview.
     private List<HistoryPreviewItem> _historyPreviewItems = new();
 
     public SearchPage(ParcelDatabase parcelDatabase, string username)
     {
         InitializeComponent();
+
         _parcelDatabase = parcelDatabase;
         _username = username;
     }
@@ -27,6 +35,8 @@ public partial class SearchPage : ContentPage
         WelcomeLabel.Text = $"Welcome back, {_username}";
 
         await _parcelDatabase.InitAsync();
+
+        // Refresh dashboard data whenever the page appears.
         await LoadParcelCountsAsync();
         await LoadHistoryPreviewAsync();
         await LoadLatestParcelSummaryAsync();
@@ -42,6 +52,7 @@ public partial class SearchPage : ContentPage
             return;
         }
 
+        // Search only within the current user's parcel records.
         var parcel = await _parcelDatabase.GetParcelByCodeAndUsernameAsync(code, _username);
 
         if (parcel == null)
@@ -52,17 +63,20 @@ public partial class SearchPage : ContentPage
 
         await ShowTopNotification("Parcel found successfully!", "#22C55E");
 
+        // Provide haptic feedback when a parcel is found.
         try
         {
             Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(250));
         }
         catch
         {
+            // Vibration may not be supported on all devices.
         }
 
         BeepService.PlaySuccessBeep();
 
         await Task.Delay(250);
+
         await Navigation.PushAsync(new ResultPage(parcel));
     }
 
@@ -91,21 +105,24 @@ public partial class SearchPage : ContentPage
         await Navigation.PopAsync();
     }
 
+    // Displays a temporary animated notification banner at the top of the page.
     private async Task ShowTopNotification(string message, string backgroundColor)
     {
         TopNotificationLabel.Text = message;
         TopNotification.Background = new SolidColorBrush(Color.FromArgb(backgroundColor));
         TopNotification.IsVisible = true;
-
         TopNotification.TranslationY = -120;
+
         await TopNotification.TranslateToAsync(0, 0, 250, Easing.CubicOut);
 
         await Task.Delay(1800);
 
         await TopNotification.TranslateToAsync(0, -120, 250, Easing.CubicIn);
+
         TopNotification.IsVisible = false;
     }
 
+    // Loads the parcel status counts for the dashboard cards.
     private async Task LoadParcelCountsAsync()
     {
         var parcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
@@ -125,6 +142,7 @@ public partial class SearchPage : ContentPage
         CollectedCountLabel.Text = collected.ToString();
     }
 
+    // Loads the three most recent parcel records for the dashboard preview.
     private async Task LoadHistoryPreviewAsync()
     {
         var parcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
@@ -148,6 +166,7 @@ public partial class SearchPage : ContentPage
             });
         }
 
+        // Reassigning the ItemsSource ensures the dashboard preview refreshes.
         HistoryPreviewCollectionView.ItemsSource = null;
         HistoryPreviewCollectionView.ItemsSource = _historyPreviewItems;
 
@@ -155,6 +174,7 @@ public partial class SearchPage : ContentPage
         HistoryPreviewCollectionView.IsVisible = _historyPreviewItems.Count > 0;
     }
 
+    // Loads the latest parcel summary shown on the dashboard.
     private async Task LoadLatestParcelSummaryAsync()
     {
         var parcels = await _parcelDatabase.GetParcelsByUsernameAsync(_username);
@@ -177,6 +197,7 @@ public partial class SearchPage : ContentPage
         LatestParcelTimeLabel.Text = GetLatestTimeText(latestParcel);
     }
 
+    // Returns a colour value based on parcel status.
     private string GetPreviewStatusColor(string? status)
     {
         if (string.IsNullOrWhiteSpace(status))
@@ -192,6 +213,7 @@ public partial class SearchPage : ContentPage
         };
     }
 
+    // Creates a short status description for the history preview.
     private string GetHistorySubtitle(Parcel parcel)
     {
         if (string.IsNullOrWhiteSpace(parcel.Status))
@@ -207,6 +229,7 @@ public partial class SearchPage : ContentPage
         };
     }
 
+    // Creates the short label shown on the latest parcel card.
     private string GetLatestTimeText(Parcel parcel)
     {
         if (string.IsNullOrWhiteSpace(parcel.Status))
@@ -223,10 +246,14 @@ public partial class SearchPage : ContentPage
     }
 }
 
+// Display model used only for the dashboard history preview.
 public class HistoryPreviewItem
 {
     public string ParcelCode { get; set; } = string.Empty;
+
     public string Status { get; set; } = string.Empty;
+
     public string StatusColor { get; set; } = "#6B7280";
+
     public string Subtitle { get; set; } = string.Empty;
 }

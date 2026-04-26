@@ -3,47 +3,44 @@ using parcel_station1.Models;
 
 namespace parcel_station1.Data
 {
+    // ParcelDatabase manages local SQLite storage for users and parcels.
     public class ParcelDatabase
     {
-        // SQLite 异步连接对象
+        // SQLite asynchronous database connection.
         private readonly SQLiteAsyncConnection _database;
 
-        // 防止数据库表被重复初始化
+        // Prevents database tables from being initialized repeatedly.
         private bool _initialized;
 
-        // 构造函数：接收数据库文件路径
         public ParcelDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
         }
 
-        // 初始化数据库表
+        // Creates the required database tables if they do not already exist.
         public async Task InitAsync()
         {
             if (_initialized)
                 return;
 
-            // 创建包裹表
             await _database.CreateTableAsync<Parcel>();
-
-            // 创建用户表（用于注册和登录）
             await _database.CreateTableAsync<User>();
 
             _initialized = true;
         }
 
         // =========================
-        // Parcel（包裹）相关方法
+        // Parcel methods
         // =========================
 
-        // 获取数据库中的所有包裹数据
+        // Gets all parcel records from the database.
         public async Task<List<Parcel>> GetParcelsAsync()
         {
             await InitAsync();
             return await _database.Table<Parcel>().ToListAsync();
         }
 
-        // 根据用户名获取该用户的所有包裹
+        // Gets all parcels that belong to a specific user.
         public async Task<List<Parcel>> GetParcelsByUsernameAsync(string username)
         {
             await InitAsync();
@@ -52,7 +49,7 @@ namespace parcel_station1.Data
                                   .ToListAsync();
         }
 
-        // 保存包裹数据
+        // Inserts a new parcel or updates an existing parcel.
         public async Task<int> SaveParcelAsync(Parcel parcel)
         {
             await InitAsync();
@@ -63,14 +60,21 @@ namespace parcel_station1.Data
             return await _database.InsertAsync(parcel);
         }
 
-        // 删除一个包裹数据
+        // Updates an existing parcel, such as changing its status to Collected.
+        public async Task<int> UpdateParcelAsync(Parcel parcel)
+        {
+            await InitAsync();
+            return await _database.UpdateAsync(parcel);
+        }
+
+        // Deletes a parcel record from the local database.
         public async Task<int> DeleteParcelAsync(Parcel parcel)
         {
             await InitAsync();
             return await _database.DeleteAsync(parcel);
         }
 
-        // 通过包裹编号查找包裹（全局）
+        // Finds a parcel by parcel code across all users.
         public async Task<Parcel?> GetParcelByCodeAsync(string parcelCode)
         {
             await InitAsync();
@@ -78,7 +82,7 @@ namespace parcel_station1.Data
                                   .FirstOrDefaultAsync(p => p.ParcelCode == parcelCode);
         }
 
-        // 通过包裹编号 + 用户名查找该用户自己的包裹
+        // Finds a parcel by parcel code only within the current user's records.
         public async Task<Parcel?> GetParcelByCodeAndUsernameAsync(string parcelCode, string username)
         {
             await InitAsync();
@@ -87,17 +91,17 @@ namespace parcel_station1.Data
         }
 
         // =========================
-        // User（用户）相关方法
+        // User methods
         // =========================
 
-        // 保存新用户到数据库
+        // Saves a new user account to the database.
         public async Task<int> SaveUserAsync(User user)
         {
             await InitAsync();
             return await _database.InsertAsync(user);
         }
 
-        // 通过用户名查找用户
+        // Finds a user by username, mainly used to prevent duplicate registration.
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
             await InitAsync();
@@ -105,7 +109,7 @@ namespace parcel_station1.Data
                                   .FirstOrDefaultAsync(u => u.Username == username);
         }
 
-        // 通过用户名和密码查找用户
+        // Finds a user by username and password for login authentication.
         public async Task<User?> GetUserAsync(string username, string password)
         {
             await InitAsync();

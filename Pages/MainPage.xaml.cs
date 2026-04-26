@@ -4,9 +4,13 @@ using parcel_station1.Services;
 
 namespace parcel_station1.Pages;
 
+// MainPage handles user login and navigation to registration.
 public partial class MainPage : ContentPage
 {
+    // Database object used for user authentication.
     private readonly ParcelDatabase _parcelDatabase;
+
+    // Prevents repeated login or navigation actions while a process is running.
     private bool _isBusy;
 
     public MainPage(ParcelDatabase parcelDatabase)
@@ -21,6 +25,7 @@ public partial class MainPage : ContentPage
 
         try
         {
+            // Ensure the required database tables are created before login.
             await _parcelDatabase.InitAsync();
         }
         catch (Exception ex)
@@ -41,12 +46,14 @@ public partial class MainPage : ContentPage
             string username = UsernameEntry.Text?.Trim() ?? string.Empty;
             string password = PasswordEntry.Text?.Trim() ?? string.Empty;
 
+            // Validate that both login fields have been completed.
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 await DisplayAlertAsync("Warning", "Please enter username and password.", "OK");
                 return;
             }
 
+            // Check the entered username and password against the local database.
             var user = await _parcelDatabase.GetUserAsync(username, password);
 
             if (user == null)
@@ -55,12 +62,14 @@ public partial class MainPage : ContentPage
                 return;
             }
 
+            // Provide feedback after a successful login.
             try
             {
                 Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(250));
             }
             catch
             {
+                // Vibration may not be supported on all devices.
             }
 
             BeepService.PlaySuccessBeep();
@@ -70,6 +79,7 @@ public partial class MainPage : ContentPage
             UsernameEntry.Text = string.Empty;
             PasswordEntry.Text = string.Empty;
 
+            // Navigate to the dashboard/search page with the current username.
             await Navigation.PushAsync(new SearchPage(_parcelDatabase, username));
         }
         catch (Exception ex)

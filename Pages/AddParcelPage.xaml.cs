@@ -3,14 +3,19 @@ using parcel_station1.Models;
 
 namespace parcel_station1.Pages;
 
+// AddParcelPage allows the current user to add a new parcel record.
 public partial class AddParcelPage : ContentPage
 {
+    // Database object used to save and retrieve parcel data.
     private readonly ParcelDatabase _parcelDatabase;
+
+    // Stores the currently logged-in username so the parcel can be linked to that user.
     private readonly string _username;
 
     public AddParcelPage(ParcelDatabase parcelDatabase, string username)
     {
         InitializeComponent();
+
         _parcelDatabase = parcelDatabase;
         _username = username;
     }
@@ -23,6 +28,7 @@ public partial class AddParcelPage : ContentPage
         string collectionCode = CollectionCodeEntry.Text?.Trim() ?? "";
         string pickupDeadline = PickupDeadlineEntry.Text?.Trim() ?? "";
 
+        // Validate that all parcel details have been entered.
         if (string.IsNullOrWhiteSpace(parcelCode) ||
             string.IsNullOrWhiteSpace(status) ||
             string.IsNullOrWhiteSpace(location) ||
@@ -33,6 +39,7 @@ public partial class AddParcelPage : ContentPage
             return;
         }
 
+        // Prevent duplicate parcel codes for the same user.
         var existingParcel = await _parcelDatabase.GetParcelByCodeAndUsernameAsync(parcelCode, _username);
 
         if (existingParcel != null)
@@ -41,6 +48,7 @@ public partial class AddParcelPage : ContentPage
             return;
         }
 
+        // Create a new parcel object using the entered values.
         var parcel = new Parcel
         {
             Username = _username,
@@ -51,9 +59,12 @@ public partial class AddParcelPage : ContentPage
             PickupDeadline = pickupDeadline
         };
 
+        // Save the parcel into the local SQLite database.
         await _parcelDatabase.SaveParcelAsync(parcel);
 
         await DisplayAlertAsync("Success", "Parcel saved successfully.", "OK");
+
+        // Return to the previous page so the dashboard can refresh its parcel data.
         await Navigation.PopAsync();
     }
 }

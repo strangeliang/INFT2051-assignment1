@@ -50,6 +50,13 @@
                                      MaximumWidthRequest="900"
                                      HorizontalOptions="Center">
 
+                    <!-- User guide -->
+                    <Label Text="Move your mouse over a parcel record to mark it as collected or clear it from history."
+                           FontSize="13"
+                           TextColor="#64748B"
+                           HorizontalTextAlignment="Center"
+                           Margin="0,0,0,4" />
+
                     <!-- Empty state -->
                     <Border x:Name="EmptyStateFrame"
                             IsVisible="False"
@@ -85,47 +92,106 @@
                                     SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
+
                                 <Border Background="White"
                                         Stroke="#E5E7EB"
                                         StrokeThickness="1"
                                         Padding="14"
                                         Margin="0,0,0,12">
+
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="18" />
                                     </Border.StrokeShape>
 
-                                    <Grid RowDefinitions="Auto,Auto,Auto"
-                                          ColumnDefinitions="*,Auto"
-                                          RowSpacing="6">
+                                    <!-- Mouse hover events -->
+                                    <Border.GestureRecognizers>
+                                        <PointerGestureRecognizer PointerEntered="OnParcelPointerEntered"
+                                                                  PointerExited="OnParcelPointerExited" />
+                                    </Border.GestureRecognizers>
 
-                                        <Label Text="{Binding ParcelCode}"
-                                               FontSize="18"
-                                               FontAttributes="Bold"
-                                               TextColor="#111827" />
+                                    <Grid ColumnDefinitions="*,170"
+                                          ColumnSpacing="14">
 
-                                        <Label Grid.Column="1"
-                                               Text="{Binding Status}"
-                                               FontSize="13"
-                                               FontAttributes="Bold"
-                                               TextColor="{Binding StatusColor}" />
+                                        <!-- Left parcel information -->
+                                        <Grid Grid.Column="0"
+                                              RowDefinitions="Auto,Auto,Auto"
+                                              ColumnDefinitions="*,Auto"
+                                              RowSpacing="6">
 
-                                        <Label Grid.Row="1"
-                                               Text="{Binding LocationDisplay}"
-                                               FontSize="13"
-                                               TextColor="#6B7280" />
+                                            <Label Text="{Binding ParcelCode}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#111827" />
 
-                                        <Label Grid.Row="1"
-                                               Grid.Column="1"
-                                               Text="{Binding PickupDeadlineDisplay}"
-                                               FontSize="12"
-                                               TextColor="#9CA3AF"
-                                               HorizontalTextAlignment="End" />
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding Status}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding StatusColor}" />
 
-                                        <Label Grid.Row="2"
-                                               Grid.ColumnSpan="2"
-                                               Text="{Binding CollectionCodeDisplay}"
-                                               FontSize="13"
-                                               TextColor="#6B7280" />
+                                            <Label Grid.Row="1"
+                                                   Text="{Binding LocationDisplay}"
+                                                   FontSize="13"
+                                                   TextColor="#6B7280" />
+
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="1"
+                                                   Text="{Binding PickupDeadlineDisplay}"
+                                                   FontSize="12"
+                                                   TextColor="#9CA3AF"
+                                                   HorizontalTextAlignment="End" />
+
+                                            <Label Grid.Row="2"
+                                                   Grid.ColumnSpan="2"
+                                                   Text="{Binding CollectionCodeDisplay}"
+                                                   FontSize="13"
+                                                   TextColor="#6B7280" />
+                                        </Grid>
+
+                                        <!-- Right action panel -->
+                                        <Border Grid.Column="1"
+                                                IsVisible="{Binding ShowActions}"
+                                                Background="#F8FAFC"
+                                                Stroke="#CBD5E1"
+                                                StrokeThickness="1"
+                                                Padding="10"
+                                                VerticalOptions="Center">
+
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="14" />
+                                            </Border.StrokeShape>
+
+                                            <VerticalStackLayout Spacing="8">
+
+                                                <Label Text="Actions"
+                                                       FontSize="12"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#475569"
+                                                       HorizontalTextAlignment="Center" />
+
+                                                <Button Text="Collected"
+                                                        HeightRequest="38"
+                                                        CornerRadius="12"
+                                                        BackgroundColor="#22C55E"
+                                                        TextColor="White"
+                                                        FontSize="13"
+                                                        FontAttributes="Bold"
+                                                        Clicked="OnCollectedClicked"
+                                                        CommandParameter="{Binding .}" />
+
+                                                <Button Text="Clear"
+                                                        HeightRequest="38"
+                                                        CornerRadius="12"
+                                                        BackgroundColor="#EF4444"
+                                                        TextColor="White"
+                                                        FontSize="13"
+                                                        FontAttributes="Bold"
+                                                        Clicked="OnClearClicked"
+                                                        CommandParameter="{Binding .}" />
+
+                                            </VerticalStackLayout>
+                                        </Border>
+
                                     </Grid>
                                 </Border>
                             </DataTemplate>
